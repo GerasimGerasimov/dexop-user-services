@@ -1,0 +1,39 @@
+{
+  "name": "userservice",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon --exec node --loader ts-node/esm src/index.ts",
+    "test": "test",
+    "start": "nodemon --exec node --loader ts-node/esm src/index.ts"
+  },
+  "keywords": [
+    "users",
+    "user",
+    "service"
+  ],
+  "author": "intmash",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.3",
+    "sequelize": "^6.37.3",
+    "sequelize-typescript": "^2.1.6",
+    "sqlite3": "^5.1.7",
+    "ts-node": "^10.9.2",
+    "tsc": "^2.0.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.4.0",
+    "@types/node": "^20.12.13",
+    "globals": "^15.3.0",
+    "tsx": "^4.11.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.12.0",
+    "ws": "^8.17.0"
+  }
+}

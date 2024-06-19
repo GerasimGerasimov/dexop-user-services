@@ -1,0 +1,88 @@
+import { Request, Response } from "express";
+import { User } from "../data/models/User";
+import { UserService } from '../services/UserService';
+
+export class UserServiceController {
+    public userService = new UserService();
+
+    createUser = async (req: Request, res: Response) => {
+        if (!req.body.title) {
+            res.status(400).send({
+                message: "Unable to create empty user."
+            });
+        return;
+        }
+
+        try {
+            const user: User = req.body;
+            const newUser = await this.userService.createUser(
+                user.firstName,
+                user.secondName,
+                user.password,
+                user.role
+            );
+            res.status(200).send(newUser);
+        } catch (error) {
+            res.status(500).send({
+                message: "Some error occurred while user creating."
+              });
+        }
+    };
+
+    updateUser = async (req: Request, res: Response) => {
+        if (!req.body.title) {
+            res.status(400).send({
+                message: "Unable to update empty user."
+            });
+        return;
+        }
+
+        try {
+            const user: User = req.body;
+            const newUser = await this.userService.updateUser(user.id);
+            res.status(200).send(newUser);
+        } catch (error) {
+            res.status(500).send({
+                message: "Some error occurred while user updating."
+              });
+        }
+    };
+
+    getUser = async (req: Request, res: Response) => {
+        if (!req.body.title) {
+            res.status(400).send({
+                message: "Unable to get empty user."
+            });
+        return;
+        }
+
+        try {
+            const user: User = req.body;
+            const newUser = await this.userService.getUserById(user.id);
+            res.status(200).send(newUser);
+        } catch (error) {
+            res.status(500).send({
+                message: "Some error occurred getting user."
+              });
+        }
+    };
+
+    deleteUser = async (req: Request, res: Response) => {
+        if (!req.body.title) {
+            res.status(400).send({
+                message: "Unable to delete empty user."
+            });
+        return;
+        }
+
+        try {
+            const user: User = req.body;
+            const newUser = await this.userService.deleteUser(user.id);
+            res.status(200).send(newUser);
+        } catch (error) {
+            res.status(500).send({
+                message: "Some error occurred while user deleting."
+            });
+        }
+    };
+}
