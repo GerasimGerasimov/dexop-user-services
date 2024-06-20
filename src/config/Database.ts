@@ -1,4 +1,5 @@
-import { Sequelize } from "sequelize";
+import { Users } from "../data/models/Users";
+import { Sequelize } from "sequelize-typescript";
 
 const DbConfig: any = {
   host: "localhost",
@@ -15,7 +16,8 @@ export const sequelize = new Sequelize({
   password: DbConfig.password,
   host: DbConfig.host,
   dialect: DbConfig.dialect,
-  storage: DbConfig.storage
+  storage: DbConfig.storage,
+  models: [Users]
 });
 
 export class Database {
@@ -28,7 +30,7 @@ export class Database {
   private async createDatabaseConnection () {
     this.sequelize = sequelize;
 
-    await this.sequelize
+    await this.sequelize!
       .authenticate().then(() => {
         console.log("Connection has been established successfully.");
       })

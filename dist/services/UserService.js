@@ -8,12 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Roles } from '../data/enums/Roles';
-import { User } from '../data/models/User';
+import { Users } from '../data/models/Users';
 export class UserService {
     createUser(firstName, secondName, password, role) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield User.create({
+                yield Users.create({
                     firstName: firstName,
                     secondName: secondName,
                     password: password,
@@ -33,7 +33,7 @@ export class UserService {
             const password = "rootAdmin";
             const role = Roles.Root;
             try {
-                yield User.create({
+                yield Users.create({
                     firstName: firstName,
                     secondName: secondName,
                     password: password,
@@ -50,7 +50,7 @@ export class UserService {
     updateUser(id_1) {
         return __awaiter(this, arguments, void 0, function* (id, firstName = null, secondName = null, password = null) {
             try {
-                const currentUser = yield User.findOne({
+                const currentUser = yield Users.findOne({
                     where: { id: id }
                 });
                 if (currentUser !== null) {
@@ -75,7 +75,7 @@ export class UserService {
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield User.findAll();
+                yield Users.findAll();
             }
             catch (error) {
                 throw new Error(error);
@@ -86,7 +86,7 @@ export class UserService {
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield User.findOne({
+                yield Users.findOne({
                     where: { id: id }
                 });
             }
@@ -99,7 +99,7 @@ export class UserService {
     deleteUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield User.findOne({
+                const user = yield Users.findOne({
                     where: { id: id }
                 });
                 user.isDeleted = true;

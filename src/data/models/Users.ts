@@ -1,9 +1,10 @@
 import { Model, Table, Column, DataType } from "sequelize-typescript";
 
 @Table({
+    timestamps: true,
     tableName: "Users", // TODO: define model table with ST
 })
-export class User extends Model {
+export class Users extends Model {
     @Column({
         type: DataType.INTEGER,
         primaryKey: true,

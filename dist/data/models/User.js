@@ -8,7 +8,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Model, Table, Column, DataType } from "sequelize-typescript";
-let User = class User extends Model {
+let Users = class Users extends Model {
 };
 __decorate([
     Column({
@@ -19,7 +19,7 @@ __decorate([
         field: "Id"
     }),
     __metadata("design:type", Number)
-], User.prototype, "id", void 0);
+], Users.prototype, "id", void 0);
 __decorate([
     Column({
         type: DataType.STRING,
@@ -27,7 +27,7 @@ __decorate([
         field: "First Name"
     }),
     __metadata("design:type", String)
-], User.prototype, "firstName", void 0);
+], Users.prototype, "firstName", void 0);
 __decorate([
     Column({
         type: DataType.STRING,
@@ -35,7 +35,7 @@ __decorate([
         field: "Second Name"
     }),
     __metadata("design:type", String)
-], User.prototype, "secondName", void 0);
+], Users.prototype, "secondName", void 0);
 __decorate([
     Column({
         type: DataType.STRING,
@@ -43,7 +43,7 @@ __decorate([
         field: "Password"
     }),
     __metadata("design:type", String)
-], User.prototype, "password", void 0);
+], Users.prototype, "password", void 0);
 __decorate([
     Column({
         type: DataType.STRING,
@@ -51,7 +51,7 @@ __decorate([
         field: "Role"
     }),
     __metadata("design:type", String)
-], User.prototype, "role", void 0);
+], Users.prototype, "role", void 0);
 __decorate([
     Column({
         type: DataType.BOOLEAN,
@@ -59,7 +59,7 @@ __decorate([
         field: "Has Logged In"
     }),
     __metadata("design:type", Boolean)
-], User.prototype, "hasLoggedIn", void 0);
+], Users.prototype, "hasLoggedIn", void 0);
 __decorate([
     Column({
         type: DataType.DATE,
@@ -67,7 +67,7 @@ __decorate([
         field: "Login Time"
     }),
     __metadata("design:type", Date)
-], User.prototype, "loginTime", void 0);
+], Users.prototype, "loginTime", void 0);
 __decorate([
     Column({
         type: DataType.BOOLEAN,
@@ -75,13 +75,14 @@ __decorate([
         field: "Is Deleted"
     }),
     __metadata("design:type", Boolean)
-], User.prototype, "isDeleted", void 0);
-User = __decorate([
+], Users.prototype, "isDeleted", void 0);
+Users = __decorate([
     Table({
-        tableName: "Users",
+        timestamps: true,
+        tableName: "Users", // TODO: define model table with ST
     })
-], User);
-export { User };
+], Users);
+export { Users };
 /**
 * "deleted" users will be marked by "isDeleted" flag
 * a full deletion may be implemented;

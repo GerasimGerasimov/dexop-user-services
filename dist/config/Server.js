@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import express from "express";
 import { Routes } from "../routes/index";
 import cors from "cors";
-import { Database } from "./DbConfig";
+import { Database } from "./Database";
 export default class Server {
     constructor(app) {
         this.config(app);
@@ -34,6 +34,7 @@ export default class Server {
             const db = new Database();
             if (db.sequelize !== undefined) {
                 yield db.sequelize.sync();
+                console.log(`Current tables are ${db.sequelize.model("Users")}`);
             }
         });
     }

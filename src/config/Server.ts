@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 import { Routes } from "../routes/index";
 import cors from "cors";
-import { Database } from "./DbConfig";
+import { Database } from "./Database";
 
 export default class Server {
   constructor (app: Application) {
@@ -26,7 +26,6 @@ export default class Server {
     const db = new Database();
     if (db.sequelize !== undefined) {
       await db.sequelize.sync();
-      console.log(db.sequelize.model("Users"));
     }
   };
 }

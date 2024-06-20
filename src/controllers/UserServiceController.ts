@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "../data/models/User";
+import { Users } from "../data/models/Users";
 import { UserService } from '../services/UserService';
 
 export class UserServiceController {
@@ -14,7 +14,7 @@ export class UserServiceController {
         }
 
         try {
-            const user: User = req.body;
+            const user: Users = req.body;
             const newUser = await this.userService.createUser(
                 user.firstName,
                 user.secondName,
@@ -38,7 +38,7 @@ export class UserServiceController {
         }
 
         try {
-            const user: User = req.body;
+            const user: Users = req.body;
             const newUser = await this.userService.updateUser(user.id);
             res.status(200).send(newUser);
         } catch (error) {
@@ -57,7 +57,7 @@ export class UserServiceController {
         }
 
         try {
-            const user: User = req.body;
+            const user: Users = req.body;
             const newUser = await this.userService.getUserById(user.id);
             res.status(200).send(newUser);
         } catch (error) {
@@ -76,7 +76,7 @@ export class UserServiceController {
         }
 
         try {
-            const user: User = req.body;
+            const user: Users = req.body;
             const newUser = await this.userService.deleteUser(user.id);
             res.status(200).send(newUser);
         } catch (error) {

@@ -1,6 +1,6 @@
 import { Roles } from '../data/enums/Roles';
 import { IUserService } from '../data/interfaces/IUserService';
-import { User } from '../data/models/User';
+import { Users } from '../data/models/Users';
 
 export class UserService implements IUserService {
     public async createUser(
@@ -10,7 +10,7 @@ export class UserService implements IUserService {
         role: string
     ): Promise<void> {
         try {
-            await User.create({
+            await Users.create({
                 firstName: firstName,
                 secondName: secondName,
                 password: password,
@@ -27,7 +27,7 @@ export class UserService implements IUserService {
         const password = "rootAdmin";
         const role = Roles.Root;
         try {
-            await User.create({
+            await Users.create({
                 firstName: firstName,
                 secondName: secondName,
                 password: password,
@@ -46,7 +46,7 @@ export class UserService implements IUserService {
         password: string | null = null
     ): Promise<void> {
         try {
-            const currentUser = await User.findOne({
+            const currentUser = await Users.findOne({
                 where: { id: id }
             });
 
@@ -72,7 +72,7 @@ export class UserService implements IUserService {
 
     public async getAllUsers () : Promise<void> {
         try {
-            await User.findAll();
+            await Users.findAll();
         } catch (error) {
             throw new Error(error);
         }
@@ -80,7 +80,7 @@ export class UserService implements IUserService {
 
     public async getUserById (id: number) : Promise<void> {
         try {
-            await User.findOne({
+            await Users.findOne({
                 where: { id: id }
             });
         } catch (error) {
@@ -90,7 +90,7 @@ export class UserService implements IUserService {
 
     public async deleteUser(id: number): Promise<void> {
         try {
-            const user = await User.findOne({
+            const user = await Users.findOne({
                 where: { id: id }
             });
             user!.isDeleted = true;
