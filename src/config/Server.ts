@@ -7,20 +7,21 @@ import * as http from "http";
 export default class Server {
   public port: number = 5005;
   public httpServer: any;
+  private db = new Database();
 
   constructor (app: Application) {
     this.config(app);
     this.synchronizeDatabase();
-    this.httpServer = http.createServer(app);
+    this.httpServer = http.createServer((req: Request, res: Response) => {
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end('Hello World!')
+    }).listen(this.port);
     new Routes(app);
-    app.get("/", (req: Request, res: Response) => {
-      res.send('Test response.')
-    });
   };
 
   private config (app: Application) : void {
     const corsOptions = {
-      origin: "localhost: 5005"
+      origin: `localhost:${this.port}`
     };
 
     app.use(cors(corsOptions));
