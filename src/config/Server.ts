@@ -6,7 +6,7 @@ import * as http from "http";
 
 export default class Server {
   public port: number = 5005;
-  public httpServer: any;
+  public httpServer: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>;
   private db = new Database();
 
   constructor (app: Application) {

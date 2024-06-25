@@ -13,7 +13,7 @@ class UserRouter {
         this.router.post("/new", async (req: Request, res: Response) => {
             console.log(req);
             try {
-                await res.json(this.userService.updateUser);
+                await res.json(this.userService.createUser);
             } catch (error) {
                 res.status(400).send(error);
             }
