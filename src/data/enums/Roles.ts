@@ -1,5 +1,5 @@
 export enum Roles {
-    Root,
-    Operator,
-    Guest
+    Root = "Root",
+    Operator = "Operator",
+    Guest = "Guest"
 }

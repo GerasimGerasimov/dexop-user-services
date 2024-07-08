@@ -1,22 +1,24 @@
 import express, { Application, Request, Response } from "express";
+import session from 'express-session';
 import { Routes } from "../routes/index";
 import cors from "cors";
-import { Database } from "./Database";
+import { Database } from './Database';
 import * as http from "http";
+import { Users } from "../data/models/Users";
+import { userService } from "../services/UserService";
+import { authService } from "../services/AuthenticationService";
 
-export default class Server {
-  public port: number = 5005;
-  public httpServer: http.Server<typeof http.IncomingMessage, typeof http.ServerResponse>;
-  private db = new Database();
+export class Server {
+  private db: Database = new Database();
+  private port: number = 5005;
+  private http: any;
+  private client: any;
 
   constructor (app: Application) {
     this.config(app);
     this.synchronizeDatabase();
-    this.httpServer = http.createServer((req: Request, res: Response) => {
-      res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end('Hello World!')
-    }).listen(this.port);
     new Routes(app);
+    this.createDefaultUser();
   };
 
   private config (app: Application) : void {
@@ -24,17 +26,42 @@ export default class Server {
       origin: `localhost:${this.port}`
     };
 
+    app.set('trust proxy', 1);
     app.use(cors(corsOptions));
     app.use(express.json());
     app.use(express.urlencoded({
       extended: true
     }));
+    app.use(session({
+      secret: authService.sessionKey,
+      resave: false,
+      saveUninitialized: true,
+      cookie: { secure: true }
+    }));
+    app.all("*", (req: Request, res: Response, next: () => void) => {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "X-Requested-With");
+      res.header('Access-Control-Allow-Headers', 'Content-Type');
+      next();
+    });
+    this.http = http.createServer(app).listen(this.port);
   };
 
   private async synchronizeDatabase () : Promise<void> {
-    const db = new Database();
-    if (db.sequelize !== undefined) {
-      await db.sequelize.sync();
+    if (this.db.sequelize !== undefined) {
+      await this.db.sequelize.sync();
+    }
+  };
+
+  private async createDefaultUser () : Promise<void> {
+    const rootUser = await Users.findOne({
+      where: {
+        firstName: "root",
+        secondName: "admin"
+       }
+    });
+    if (rootUser === null) {
+      await userService.createDefaultUser();
     }
   };
 }

@@ -2,13 +2,13 @@ import { Roles } from '../data/enums/Roles';
 import { IUserService } from '../data/interfaces/IUserService';
 import { Users } from '../data/models/Users';
 
-export class UserService implements IUserService {
+class UserService implements IUserService {
     public async createUser(
         firstName: string,
         secondName: string,
         password: string,
         role: string
-    ): Promise<void> {
+    ) : Promise<void> {
         try {
             await Users.create({
                 firstName: firstName,
@@ -21,18 +21,16 @@ export class UserService implements IUserService {
         }
     };
 
-    public async createDefaultUser () : Promise<void> {
-        const firstName = "root";
-        const secondName = "admin";
-        const password = "rootAdmin";
-        const role = Roles.Root;
+    public async authenticateUser(id: number) : Promise<void> {
         try {
-            await Users.create({
-                firstName: firstName,
-                secondName: secondName,
-                password: password,
-                role: role.toString()
+            const user = await Users.findOne({
+                where: { id: id }
             });
+
+            if (user !== null) {
+                user.hasLoggedIn = true;
+                await user.save();
+            } 
         } catch (error) {
             throw new Error(error);
         }
@@ -44,7 +42,7 @@ export class UserService implements IUserService {
         firstName: string | null = null,
         secondName: string | null = null,
         password: string | null = null
-    ): Promise<void> {
+    ) : Promise<void> {
         try {
             const currentUser = await Users.findOne({
                 where: { id: id }
@@ -55,8 +53,16 @@ export class UserService implements IUserService {
                     currentUser.firstName = firstName;
                 }
 
+                if (firstName === "root") {
+                    alert("This name is already in use.")
+                }
+
                 if (secondName !== null) {
                     currentUser.secondName = secondName;
+                }
+
+                if (secondName === "admin") {
+                    alert("This surname is already in use.")
                 }
 
                 if (password !== null) {
@@ -70,25 +76,18 @@ export class UserService implements IUserService {
         }
     };
 
-    public async getAllUsers () : Promise<void> {
+    public async getUserById (id: number) : Promise<Users> {
         try {
-            await Users.findAll();
-        } catch (error) {
-            throw new Error(error);
-        }
-    };
-
-    public async getUserById (id: number) : Promise<void> {
-        try {
-            await Users.findOne({
+            const user = await Users.findOne({
                 where: { id: id }
             });
+            return user!;
         } catch (error) {
             throw new Error(error);
         }
     };
 
-    public async deleteUser(id: number): Promise<void> {
+    public async deleteUser(id: number) : Promise<void> {
         try {
             const user = await Users.findOne({
                 where: { id: id }
@@ -99,4 +98,24 @@ export class UserService implements IUserService {
             throw new Error(error);
         }
     };
+
+    public async createDefaultUser () : Promise<void> {
+        const firstName = "root";
+        const secondName = "admin";
+        const password = "rootAdmin";
+        const role = Roles.Root;
+        try {
+            await Users.create({
+                id: 0,
+                firstName: firstName,
+                secondName: secondName,
+                password: password,
+                role: role.toString()
+            });
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
 }
+
+export const userService = new UserService();

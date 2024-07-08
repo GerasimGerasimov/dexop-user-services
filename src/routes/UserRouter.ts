@@ -1,9 +1,9 @@
-import { UserService } from "../services/UserService";
+import { UserServiceController } from "../controllers/UserServiceController";
 import express, { Request, Response } from "express";
 
-class UserRouter {
-    public userService = new UserService();
+class UserRouter {;
     public router = express.Router();
+    private controller = new UserServiceController();
 
     constructor () {
         this.initializeRoutes();
@@ -13,7 +13,7 @@ class UserRouter {
         this.router.post("/new", async (req: Request, res: Response) => {
             console.log(req);
             try {
-                await res.json(this.userService.createUser);
+                await res.json(this.controller.createUser);
             } catch (error) {
                 res.status(400).send(error);
             }
@@ -22,34 +22,25 @@ class UserRouter {
         this.router.put("/update", async (req: Request, res: Response) => {
             console.log(req);
             try {
-                await res.json(this.userService.updateUser);
+                await res.json(this.controller.updateUser);
             } catch (error) {
                 res.status(400).send(error);
             }
         });
 
-        this.router.get("/get-user:id", async (req: Request, res: Response) => {
+        this.router.get("/get-user", async (req: Request, res: Response) => {
             console.log(req);
             try {
-                await res.json(this.userService.getUserById);
+                await res.json(this.controller.getUser);
             } catch (error) {
                 res.status(400).send(error);
             }
         });
 
-        this.router.get("/get-all-users", async (req: Request, res: Response) => {
+        this.router.delete("/delete-user", async (req: Request, res: Response) => {
             console.log(req);
             try {
-                await res.json(this.userService.getAllUsers);
-            } catch (error) {
-                res.status(400).send(error);
-            }
-        });
-
-        this.router.delete("/delete-user:id", async (req: Request, res: Response) => {
-            console.log(req);
-            try {
-                await res.json(this.userService.deleteUser);
+                await res.json(this.controller.deleteUser);
             } catch (error) {
                 res.status(400).send(error);
             }

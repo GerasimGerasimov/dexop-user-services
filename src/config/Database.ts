@@ -1,18 +1,18 @@
 import { Users } from "../data/models/Users";
-import { Sequelize } from "sequelize-typescript";
+import { Sequelize, SequelizeOptions } from "sequelize-typescript";
 
-const DbConfig: any = {
+const DbConfig: SequelizeOptions = {
   host: "localhost",
-  user: "root",
+  username: "root",
   password: "test",
-  db: "test",
+  database: "test",
   dialect: "sqlite",
-  storage: ":memory:"
+  storage: "db.sqlite"
 };
 
 export const sequelize = new Sequelize({
-  database: DbConfig.db,
-  username: DbConfig.user,
+  database: DbConfig.database,
+  username: DbConfig.username,
   password: DbConfig.password,
   host: DbConfig.host,
   dialect: DbConfig.dialect,

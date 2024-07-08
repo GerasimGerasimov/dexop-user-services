@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import { Users } from "../data/models/Users";
-import { UserService } from '../services/UserService';
+import { userService } from '../services/UserService';
 
 export class UserServiceController {
-    public userService = new UserService();
-
     createUser = async (req: Request, res: Response) => {
         if (!req.body.title) {
             res.status(400).send({
@@ -15,7 +13,7 @@ export class UserServiceController {
 
         try {
             const user: Users = req.body;
-            const newUser = await this.userService.createUser(
+            const newUser = await userService.createUser(
                 user.firstName,
                 user.secondName,
                 user.password,
@@ -39,7 +37,7 @@ export class UserServiceController {
 
         try {
             const user: Users = req.body;
-            const newUser = await this.userService.updateUser(user.id);
+            const newUser = await userService.updateUser(user.id);
             res.status(200).send(newUser);
         } catch (error) {
             res.status(500).send({
@@ -58,7 +56,7 @@ export class UserServiceController {
 
         try {
             const user: Users = req.body;
-            const newUser = await this.userService.getUserById(user.id);
+            const newUser = await userService.getUserById(user.id);
             res.status(200).send(newUser);
         } catch (error) {
             res.status(500).send({
@@ -77,7 +75,7 @@ export class UserServiceController {
 
         try {
             const user: Users = req.body;
-            const newUser = await this.userService.deleteUser(user.id);
+            const newUser = await userService.deleteUser(user.id);
             res.status(200).send(newUser);
         } catch (error) {
             res.status(500).send({
