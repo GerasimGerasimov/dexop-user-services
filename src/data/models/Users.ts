@@ -6,8 +6,7 @@ import { Model, Table, Column, DataType } from "sequelize-typescript";
 })
 export class Users extends Model {
     @Column({
-        type: DataType.UUID,
-        defaultValue: DataType.UUIDV4,
+        type: DataType.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
