@@ -4,6 +4,7 @@ import { Routes } from "../routes/index";
 import cors from "cors";
 import { Database } from './Database';
 import * as http from "http";
+import bodyParser from "body-parser";
 import { Users } from "../data/models/Users";
 import { userService } from "../services/UserService";
 import { authService } from "../services/AuthenticationService";
@@ -29,6 +30,7 @@ export class Server {
     app.set('trust proxy', 1);
     app.use(cors(corsOptions));
     app.use(express.json());
+    app.use(bodyParser.json());
     app.use(express.urlencoded({
       extended: true
     }));

@@ -37,7 +37,16 @@ class UserRouter {;
             }
         });
 
-        this.router.delete("/delete-user", async (req: Request, res: Response) => {
+        this.router.get("/get-all", async (req: Request, res: Response) => {
+            console.log(req);
+            try {
+                await res.json(this.controller.getUsers);
+            } catch (error) {
+                res.status(400).send(error);
+            }
+        });
+
+        this.router.put("/delete-user", async (req: Request, res: Response) => {
             console.log(req);
             try {
                 await res.json(this.controller.deleteUser);

@@ -1,16 +1,11 @@
 import { Users } from "../models/Users";
 
 export interface IUserService {
-    createUser(
-        firstName: string,
-        secondName: string,
-        password: string,
-        role: string
-    ): Promise<void>;
+    createUser(newUser: Users): Promise<Users>;
     createDefaultUser() : Promise<void>;
-    authenticateUser(id: number) : Promise<void>;
-    updateUser(id: number) : Promise<void>;
+    updateUser(user: Users) : Promise<number>;
     getUserById(id: number) : Promise<Users>;
+    getUsers() : Promise<Users[]>;
     deleteUser(id: number) : Promise<void>;
 }
 

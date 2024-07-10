@@ -4,7 +4,7 @@ import { authRouter } from "./AuthenticationRoutes";
 
 export class Routes {
     constructor (app: Application) {
-        app.use("/api", userRouter);
-        app.use("/auth", authRouter);
+        app.use("/api/users", userRouter);
+        app.use("/api/auth", authRouter);
     }
 }

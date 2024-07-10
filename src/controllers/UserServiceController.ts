@@ -12,14 +12,9 @@ export class UserServiceController {
         }
 
         try {
-            const user: Users = req.body;
-            const newUser = await userService.createUser(
-                user.firstName,
-                user.secondName,
-                user.password,
-                user.role
-            );
-            res.status(200).send(newUser);
+            const newUser: Users = req.body;
+            const userToSave = await userService.createUser(newUser);
+            res.status(200).send(userToSave);
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred while user creating."
@@ -37,8 +32,17 @@ export class UserServiceController {
 
         try {
             const user: Users = req.body;
-            const newUser = await userService.updateUser(user.id);
-            res.status(200).send(newUser);
+            user.id = req.params.id;
+            const rowsNumber = await userService.updateUser(user);
+            if (rowsNumber === 1) {
+                res.send({
+                    message: `User with id = ${user.id} was successfully updated.`
+                });
+            } else {
+                res.send({
+                  message: `Cannot update user with id=${user.id}.`
+                });
+            }
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred while user updating."
@@ -47,6 +51,8 @@ export class UserServiceController {
     };
 
     getUser = async (req: Request, res: Response) => {
+        const id = parseInt(req.params.id);
+
         if (!req.body.title) {
             res.status(400).send({
                 message: "Unable to get empty user."
@@ -55,13 +61,23 @@ export class UserServiceController {
         }
 
         try {
-            const user: Users = req.body;
-            const newUser = await userService.getUserById(user.id);
-            res.status(200).send(newUser);
+            const user = await userService.getUserById(id);
+            res.status(200).send(user);
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred getting user."
-              });
+            });
+        }
+    };
+
+    getUsers = async (req: Request, res: Response) => {
+        try {
+            const users = await userService.getUsers();
+            res.status(200).send(users);
+        } catch (error) {
+            res.status(500).send({
+                message: "Unable to get users."
+            });
         }
     };
 
