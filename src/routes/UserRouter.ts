@@ -20,7 +20,6 @@ class UserRouter {;
         });
 
         this.router.put("/update", async (req: Request, res: Response) => {
-            console.log(req);
             try {
                 await res.json(this.controller.updateUser);
             } catch (error) {

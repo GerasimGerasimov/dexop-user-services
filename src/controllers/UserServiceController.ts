@@ -13,6 +13,10 @@ export class UserServiceController {
 
         try {
             const newUser: Users = req.body;
+            newUser.firstName = req.query.firstName;
+            newUser.secondName = req.query.secondName;
+            newUser.password = req.query.password;
+            newUser.role = req.query.role;
             const userToSave = await userService.createUser(newUser);
             res.status(200).send(userToSave);
         } catch (error) {
@@ -32,7 +36,7 @@ export class UserServiceController {
 
         try {
             const user: Users = req.body;
-            user.id = req.params.id;
+            user.id = req.query.id;
             const rowsNumber = await userService.updateUser(user);
             if (rowsNumber === 1) {
                 res.send({
@@ -51,7 +55,7 @@ export class UserServiceController {
     };
 
     getUser = async (req: Request, res: Response) => {
-        const id = parseInt(req.params.id);
+        const id = req.query.params.id;
 
         if (!req.body.title) {
             res.status(400).send({
