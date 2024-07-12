@@ -7,6 +7,8 @@ export interface IUserService {
     getUserById(id: number) : Promise<Users>;
     getUsers() : Promise<Users[]>;
     deleteUser(id: number) : Promise<void>;
+    login(id: number, password: string) : Promise<void>;
+    logout(id: number) : Promise<void>;
 }
 
 /**

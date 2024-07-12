@@ -3,7 +3,7 @@ import { Users } from "../data/models/Users";
 import { userService } from '../services/UserService';
 
 export class UserServiceController {
-    createUser = async (req: Request, res: Response) => {
+    public createUser = async (req: Request, res: Response) => {
         if (!req.body.title) {
             res.status(400).send({
                 message: "Unable to create empty user."
@@ -22,11 +22,13 @@ export class UserServiceController {
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred while user creating."
-              });
+            });
+        } finally {
+            res.end();
         }
     };
 
-    updateUser = async (req: Request, res: Response) => {
+    public updateUser = async (req: Request, res: Response) => {
         if (!req.body.title) {
             res.status(400).send({
                 message: "Unable to update empty user."
@@ -50,12 +52,14 @@ export class UserServiceController {
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred while user updating."
-              });
+            });
+        } finally {
+            res.end();
         }
     };
 
-    getUser = async (req: Request, res: Response) => {
-        const id = req.query.params.id;
+    public getUser = async (req: Request, res: Response) => {
+        const id = req.query.id;
 
         if (!req.body.title) {
             res.status(400).send({
@@ -71,6 +75,8 @@ export class UserServiceController {
             res.status(500).send({
                 message: "Some error occurred getting user."
             });
+        } finally {
+            res.end();
         }
     };
 
@@ -82,6 +88,8 @@ export class UserServiceController {
             res.status(500).send({
                 message: "Unable to get users."
             });
+        } finally {
+            res.end();
         }
     };
 
@@ -95,12 +103,65 @@ export class UserServiceController {
 
         try {
             const user: Users = req.body;
+            user.id = req.query.id;
             const newUser = await userService.deleteUser(user.id);
             res.status(200).send(newUser);
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred while user deleting."
             });
+        } finally {
+            res.end();
+        }
+    };
+
+    login = async (req: Request, res: Response) => {
+        if (!req.body.title) {
+            res.status(400).send({
+                message: "Unable to login."
+            });
+        return;
+    }
+
+        try {
+            const user: Users = req.body;
+            user.id = req.query.id;
+            user.password = req.query.pawwsord;
+            const newUser = await userService.login(
+                user.id,
+                user.password
+            );
+            res.status(200).send(newUser);
+        } catch (error) {
+            res.status(500).send({
+                message: "Some error occurred while user authentication."
+            });
+        } finally {
+            res.end();
+        }
+    };
+
+    logout = async (req: Request, res: Response) => {
+        if (!req.body.title) {
+            res.status(400).send({
+                message: "Unable to logout."
+            });
+        return;
+        }
+
+        try {
+            const user: Users = req.body;
+            user.id = req.query.id;
+            const newUser = await userService.logout(
+                user.id
+            );
+            res.status(200).send(newUser);
+        } catch (error) {
+            res.status(500).send({
+                message: "Some error occurred while user creating."
+            });
+        } finally {
+            res.end();
         }
     };
 }

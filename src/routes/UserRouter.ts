@@ -45,6 +45,8 @@ class UserRouter {;
             }
         });
 
+        // TODO: define login/logout routes
+
         this.router.put("/delete-user", async (req: Request, res: Response) => {
             console.log(req);
             try {

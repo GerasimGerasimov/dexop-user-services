@@ -76,6 +76,39 @@ class UserService implements IUserService {
             throw new Error(error);
         }
     };
+
+    public async login (id: number, password: string) : Promise<void> {
+        const user = await Users.findOne({
+            where: {
+                id: id,
+                password: password
+            }
+        });
+
+        try {
+            if (user !== null) {
+                user.hasLoggedIn = true;
+                await user.save();
+            }
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    public async logout (id: number) : Promise<void> {
+        const user = await Users.findOne({
+            where: { id: id }
+        });
+
+        try {
+            if (user !== null) {
+                user.hasLoggedIn = false;
+                await user.save();
+            }
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
 }
 
 export const userService = new UserService();

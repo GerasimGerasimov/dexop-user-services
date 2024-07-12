@@ -6,21 +6,25 @@ import { Database } from './Database';
 import * as http from "http";
 import { Users } from "../data/models/Users";
 import { userService } from "../services/UserService";
-import { authService } from "../services/AuthenticationService";
 
 export class Server {
   private db: Database = new Database();
   private port: number = 5005;
   private http: any;
+  private symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQSTUVWXYZ0123456789";
+  private sessionKey = '';
 
   constructor (app: Application) {
     this.config(app);
+    this.generateRandomKey();
     this.synchronizeDatabase();
     new Routes(app);
     this.createDefaultUser();
   };
 
   private config (app: Application) : void {
+    this.http = http.createServer(app).listen(this.port);
+
     const corsOptions = {
       origin: `localhost:${this.port}`
     };
@@ -32,7 +36,7 @@ export class Server {
       extended: true
     }));
     app.use(session({
-      secret: authService.sessionKey,
+      secret: this.sessionKey,
       resave: false,
       saveUninitialized: true,
       cookie: { secure: true }
@@ -43,7 +47,6 @@ export class Server {
       res.header('Access-Control-Allow-Headers', 'Content-Type');
       next();
     });
-    this.http = http.createServer(app).listen(this.port);
   };
 
   private async synchronizeDatabase () : Promise<void> {
@@ -55,6 +58,7 @@ export class Server {
   private async createDefaultUser () : Promise<void> {
     const rootUser = await Users.findOne({
       where: {
+        id: 0,
         firstName: "root",
         secondName: "admin"
        }
@@ -62,5 +66,15 @@ export class Server {
     if (rootUser === null) {
       await userService.createDefaultUser();
     }
+  };
+
+  private generateRandomKey () : string {
+    let key = '';
+
+    for (let i = 0; i < 15; i++) {
+      key += this.symbols.charAt(Math.floor(Math.random() * this.symbols.length));
+    }
+
+    return this.sessionKey = key.slice(0, 5) + '-' + key.slice(5, 5) + '-' + key.slice(10, 5);
   };
 }
