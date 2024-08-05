@@ -3,6 +3,6 @@ import { userRouter } from "./UserRouter";
 
 export class Routes {
     constructor (app: Application) {
-        app.use("/users", userRouter);
+        app.use("/api", userRouter);
     }
 }

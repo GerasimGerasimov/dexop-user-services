@@ -1,165 +1,162 @@
 import { Request, Response } from "express";
 import { Users } from "../data/models/Users";
-import { userService } from '../services/UserService';
 
 export class UserServiceController {
     public createUser = async (req: Request, res: Response) => {
-        if (!req.body.title) {
-            res.status(400).send({
-                message: "Unable to create empty user."
-            });
-        return;
-        }
-
         try {
-            const newUser: Users = req.body;
-            newUser.firstName = req.query.firstName;
-            newUser.secondName = req.query.secondName;
-            newUser.password = req.query.password;
-            newUser.role = req.query.role;
-            const userToSave = await userService.createUser(newUser);
-            res.status(200).send(userToSave);
+            const { firstName, secondName, role, password } = req.body;
+            const user = await Users.create({
+                firstName: firstName,
+                secondName: secondName,
+                role: role,
+                password: password
+            });
+
+            if (!user) {
+                res.status(500).send({
+                    message: "Unable to create user."
+                });
+            } else {
+                res.json(user);
+            }
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred while user creating."
             });
+            console.log(error);
         } finally {
             res.end();
         }
     };
 
     public updateUser = async (req: Request, res: Response) => {
-        if (!req.body.title) {
-            res.status(400).send({
-                message: "Unable to update empty user."
-            });
-        return;
-        }
-
         try {
-            const user: Users = req.body;
-            user.id = req.query.id;
-            const rowsNumber = await userService.updateUser(user);
-            if (rowsNumber === 1) {
-                res.send({
-                    message: `User with id = ${user.id} was successfully updated.`
+            const id = req.params.id;
+            const { password } = req.body;
+            const user = await Users.findByPk(id);
+            console.log(user);
+
+            if (!user) {
+                res.status(500).send({
+                    message: `User with ID ${id} not found`
                 });
             } else {
-                res.send({
-                  message: `Cannot update user with id=${user.id}.`
-                });
+                user.password = password;
+                await user.save();
+
+                res.json({ message: 'User updated successfully', user })
             }
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred while user updating."
             });
+            console.log(error);
         } finally {
             res.end();
         }
     };
 
     public getUser = async (req: Request, res: Response) => {
-        const id = req.query.id;
-
-        if (!req.body.title) {
-            res.status(400).send({
-                message: "Unable to get empty user."
-            });
-        return;
-        }
-
         try {
-            const user = await userService.getUserById(id);
-            res.status(200).send(user);
+            const id = req.params.id;
+            const user = await Users.findByPk(id);
+            if (!user) {
+                res.status(500).send({
+                    message: "User not found"
+                });
+            } else {
+                res.json(user);
+            }
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred getting user."
             });
+            console.log(error);
         } finally {
             res.end();
         }
     };
 
-    getUsers = async (req: Request, res: Response) => {
+    public getUsers = async (req: Request, res: Response) => {
         try {
-            const users = await userService.getUsers();
-            res.status(200).send(users);
+            const users = await Users.findAll();
+            if (!users) {
+                res.status(500).send({
+                    message: "Unable to get list of users."
+                });
+            } else {
+                res.json(users);
+            }
         } catch (error) {
             res.status(500).send({
                 message: "Unable to get users."
             });
+            console.log(error);
         } finally {
             res.end();
         }
     };
 
-    deleteUser = async (req: Request, res: Response) => {
-        if (!req.body.title) {
-            res.status(400).send({
-                message: "Unable to delete empty user."
-            });
-        return;
-        }
-
+    public deleteUser = async (req: Request, res: Response) => {
         try {
-            const user: Users = req.body;
-            user.id = req.query.id;
-            const newUser = await userService.deleteUser(user.id);
-            res.status(200).send(newUser);
+            const id: number = req.params!.id;
+            const user = await Users.findByPk(id);
+
+            if (user !== null) {
+                await user.destroy();
+            } else {
+                console.log(`Cannot find user with ID ${id}`);
+                res.status(404).send(`Cannot find user with ID ${id}`);
+            }
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred while user deleting."
             });
+            console.log(error);
         } finally {
             res.end();
         }
     };
 
-    login = async (req: Request, res: Response) => {
-        if (!req.body.title) {
-            res.status(400).send({
-                message: "Unable to login."
-            });
-        return;
-    }
-
+    public login = async (req: Request, res: Response) => {
         try {
-            const user: Users = req.body;
-            user.id = req.query.id;
-            user.password = req.query.pawwsord;
-            const newUser = await userService.login(
-                user.id,
-                user.password
-            );
-            res.status(200).send(newUser);
+            const id = req.params.id;
+            const user = await Users.findByPk(id);
+            if (!user) {
+                res.status(500).send({
+                    message: `Unable to find user with ID ${id}`
+                });
+            } else {
+                user.hasLoggedIn = true;
+                user.save();
+            }
         } catch (error) {
             res.status(500).send({
                 message: "Some error occurred while user authentication."
             });
+            console.log(error);
         } finally {
             res.end();
         }
     };
 
-    logout = async (req: Request, res: Response) => {
-        if (!req.body.title) {
-            res.status(400).send({
-                message: "Unable to logout."
-            });
-        return;
-        }
-
+    public logout = async (req: Request, res: Response) => {
         try {
-            const user: Users = req.body;
-            user.id = req.query.id;
-            const newUser = await userService.logout(
-                user.id
-            );
-            res.status(200).send(newUser);
+            const id = req.query.params.id;
+            const user = await Users.findByPk(id);
+            if (!user) {
+                res.status(500).send({
+                    message: `Unable to find user with ID ${id}`
+                });
+            } else {
+                user.hasLoggedIn = false;
+                user.save();
+            }
         } catch (error) {
             res.status(500).send({
-                message: "Some error occurred while user creating."
+                message: "Some error occurred while user logout."
             });
+            console.log(error);
         } finally {
             res.end();
         }
