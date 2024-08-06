@@ -31,7 +31,7 @@ export class UserServiceController {
 
     public updateUser = async (req: Request, res: Response) => {
         try {
-            const id = req.params.id;
+            const id = req.query.id;
             const { password } = req.body;
             const user = await Users.findByPk(id);
             console.log(user);
@@ -58,7 +58,7 @@ export class UserServiceController {
 
     public getUser = async (req: Request, res: Response) => {
         try {
-            const id = req.params.id;
+            const id = req.query.id;
             const user = await Users.findByPk(id);
             if (!user) {
                 res.status(500).send({
@@ -99,7 +99,7 @@ export class UserServiceController {
 
     public deleteUser = async (req: Request, res: Response) => {
         try {
-            const id: number = req.params!.id;
+            const id: number = req.query.id;
             const user = await Users.findByPk(id);
 
             if (user !== null) {
@@ -120,7 +120,7 @@ export class UserServiceController {
 
     public login = async (req: Request, res: Response) => {
         try {
-            const id = req.params.id;
+            const id = req.query.id;
             const user = await Users.findByPk(id);
             if (!user) {
                 res.status(500).send({
@@ -142,7 +142,7 @@ export class UserServiceController {
 
     public logout = async (req: Request, res: Response) => {
         try {
-            const id = req.query.params.id;
+            const id = req.query.id;
             const user = await Users.findByPk(id);
             if (!user) {
                 res.status(500).send({

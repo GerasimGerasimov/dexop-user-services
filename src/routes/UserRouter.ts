@@ -1,5 +1,5 @@
 import { UserServiceController } from "../controllers/UserServiceController";
-import express, { Request, Response } from "express";
+import express from "express";
 
 class UserRouter {;
     public router = express.Router();
