@@ -8,7 +8,7 @@ import { Roles } from "../data/enums/Roles";
 
 export class Server {
   private db: Database = new Database();
-  private port: number = 5005;
+  private port: number = 5010;
   private http: any;
 
   constructor (app: Application) {
@@ -22,10 +22,12 @@ export class Server {
     this.http = http.createServer(app).listen(this.port);
 
     const corsOptions = {
-      origin: `localhost:${this.port}`
+      origin: `http://localhost:${this.port}`,
+      credetentials: true,
+      allowedHeaders: ['Content-Type'],
+      optionsSuccessStatus: 200
     };
 
-    app.set('trust proxy', 1);
     app.use(cors(corsOptions));
     app.use(express.json());
     app.use(express.urlencoded({
