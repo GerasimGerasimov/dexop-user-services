@@ -128,6 +128,7 @@ export class UserServiceController {
                 });
             } else {
                 user.hasLoggedIn = true;
+                user.loginTime = new Date();
                 user.save();
             }
         } catch (error) {
