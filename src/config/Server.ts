@@ -21,14 +21,7 @@ export class Server {
   private config (app: Application) : void {
     this.http = http.createServer(app).listen(this.port);
 
-    const corsOptions = {
-      origin: `http://localhost:${this.port}`,
-      credetentials: true,
-      allowedHeaders: ['Content-Type'],
-      optionsSuccessStatus: 200
-    };
-
-    app.use(cors(corsOptions));
+    app.use(cors());
     app.use(express.json());
     app.use(express.urlencoded({
       extended: true

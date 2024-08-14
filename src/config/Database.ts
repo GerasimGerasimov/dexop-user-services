@@ -7,7 +7,7 @@ const DbConfig: SequelizeOptions = {
   password: "test",
   database: "test",
   dialect: "sqlite",
-  storage: "src/db.sqlite"
+  storage: "../db.sqlite"
 };
 
 export const sequelize = new Sequelize({
