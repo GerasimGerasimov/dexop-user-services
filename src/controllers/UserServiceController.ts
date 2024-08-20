@@ -32,7 +32,7 @@ export class UserServiceController {
     public updateUser = async (req: Request, res: Response) => {
         try {
             const id = req.query.id;
-            const { password } = req.body;
+            const { password, firstName, secondName, role } = req.body;
             const user = await Users.findByPk(id);
             console.log(user);
 
@@ -41,7 +41,18 @@ export class UserServiceController {
                     message: `User with ID ${id} not found`
                 });
             } else {
-                user.password = password;
+                if (password !== undefined) {
+                    user.password = password;
+                }
+                if (firstName !== undefined) {
+                    user.firstName = firstName;
+                }
+                if (secondName !== undefined) {
+                    user.secondName = secondName;
+                }
+                if (role !== undefined) {
+                    user.role = role;
+                }
                 await user.save();
 
                 res.json({ message: 'User updated successfully', user })
